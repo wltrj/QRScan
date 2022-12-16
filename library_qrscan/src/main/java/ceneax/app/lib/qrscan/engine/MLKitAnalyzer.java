@@ -2,6 +2,7 @@ package ceneax.app.lib.qrscan.engine;
 
 import android.annotation.SuppressLint;
 import android.media.Image;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.camera.core.ImageProxy;
@@ -78,14 +79,27 @@ public class MLKitAnalyzer extends QRAnalyzer {
     public static List<ParseResult> transResults(List<Barcode> barcodes, int rotationDegrees, long tookMs) {
         List<ParseResult> results = new ArrayList<>();
         for (int i = 0; i < barcodes.size(); i++) {
-            if (barcodes.get(i).getRawValue() == null) {
-                continue;
+            try {
+                // getRawValue 为 条码信息
+                // getDisplayValue 为 二维码信息
+                String code = "";
+                if (barcodes.get(i).getRawValue() == null &&
+                        barcodes.get(i).getDisplayValue() == null) {
+                    continue;
+                }
+                if (barcodes.get(i).getRawValue() == null){
+                    code = barcodes.get(i).getDisplayValue();
+                }else{
+                    code = barcodes.get(i).getRawValue();
+                }
+                results.add(new ParseResult(
+                        ImageUtil.rotateRect(barcodes.get(i).getBoundingBox(), rotationDegrees),
+                        code,
+                        tookMs
+                ));
+            }catch (Exception e){
+
             }
-            results.add(new ParseResult(
-                    ImageUtil.rotateRect(barcodes.get(i).getBoundingBox(), rotationDegrees),
-                    Objects.requireNonNull(barcodes.get(i).getRawValue()),
-                    tookMs
-            ));
         }
         return results;
     }
