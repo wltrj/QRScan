@@ -97,6 +97,10 @@ public final class QRCamera {
     @SuppressLint("RestrictedApi")
     @Nullable
     public CameraInternal getCamera() {
+        if (mPreview == null){
+            mPreview = new Preview.Builder().build();
+            mPreview.setSurfaceProvider(mBuilder.previewView.getSurfaceProvider());
+        }
         return mPreview.getCamera();
     }
 
