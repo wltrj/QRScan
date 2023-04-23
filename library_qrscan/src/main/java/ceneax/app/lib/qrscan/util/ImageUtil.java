@@ -30,7 +30,7 @@ public class ImageUtil {
     /**
      * 将 YUV 转 NV21
      */
-    public static byte[] yuvToNV21(ImageProxy image) {
+    public static synchronized byte[] yuvToNV21(ImageProxy image) {
         ImageProxy.PlaneProxy[] planes = image.getPlanes();
 
         ByteBuffer yBuffer = planes[0].getBuffer();
@@ -63,7 +63,7 @@ public class ImageUtil {
     /**
      * 将 NV21 图像数据转换为 Bitmap
      */
-    public static Bitmap nv21ToBitmap(byte[] data, int width, int height) {
+    public static synchronized Bitmap nv21ToBitmap(byte[] data, int width, int height) {
         BitmapFactory.Options newOptions = new BitmapFactory.Options();
         newOptions.inJustDecodeBounds = true;
         YuvImage yuvImage = new YuvImage(data, ImageFormat.NV21, width, height, null);
@@ -84,7 +84,7 @@ public class ImageUtil {
     /**
      * 将 YUV 转 Bitmap
      */
-    public static Bitmap yuvToBitmap(ImageProxy image) {
+    public static synchronized Bitmap yuvToBitmap(ImageProxy image) {
         return nv21ToBitmap(yuvToNV21(image), image.getWidth(), image.getHeight());
     }
 
@@ -94,7 +94,7 @@ public class ImageUtil {
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
 
-    public static Rect rotateRect(Rect src, int angle) {
+    public static synchronized Rect rotateRect(Rect src, int angle) {
         if (src == null) {
             return null;
         }
