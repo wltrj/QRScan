@@ -2,6 +2,7 @@ package ceneax.app.lib.qrscan.util
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import ceneax.app.lib.qrscan.util.gs1_decoder.Gs1Decoder
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.datamatrix.DataMatrixWriter
@@ -103,7 +104,15 @@ object ImageUtilExtends {
      * (01) 商品的唯一标识符
      * @param code String
      */
-    fun analyzeGS1Code(code:String){
-
+    fun analyzeGS1Code(code:String):HashMap<String,String>{
+        val hashMap = HashMap<String,String>()
+        val gs1Decoder = Gs1Decoder()
+        val msg = gs1Decoder.decodeCode(code)
+        msg.forEach {
+            runCatching {
+                hashMap[it.applicationIdentifier] = it.data
+            }
+        }
+        return hashMap
     }
 }

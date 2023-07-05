@@ -22,8 +22,11 @@ class ExampleUnitTest {
 }
 
 private fun testAnalyzeUIDCode(code:String){
-
+    val hashMap = HashMap<String,String>()
     val gs1Decoder = Gs1Decoder()
     val msg = gs1Decoder.decodeCode(code)
-    println(msg.getItemByAi("01").data)
+    msg.forEach {
+        hashMap[it.applicationIdentifier] = it.data
+        println("${it.applicationIdentifier} ${it.data}")
+    }
 }
