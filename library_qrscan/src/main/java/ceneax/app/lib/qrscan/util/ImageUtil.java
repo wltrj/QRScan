@@ -41,7 +41,7 @@ public class ImageUtil {
         int uSize = uBuffer.remaining();
         int vSize = vBuffer.remaining();
         int size = image.getWidth() * image.getHeight();
-        byte[] nv21 = new byte[size * 3 / 2];
+        byte[] nv21 = new byte[size * 3 /*/ 2*/];
         yBuffer.get(nv21, 0, ySize);
         vBuffer.get(nv21, ySize, vSize);
 
